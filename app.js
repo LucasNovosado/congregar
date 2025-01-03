@@ -1,16 +1,30 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cultRoutes = require('./routes/cultRoutes');
+const path = require('path');
+const Parse = require('parse/node');
+
+// Configuração do Parse
+Parse.initialize(process.env.PARSE_APP_ID, process.env.PARSE_JS_KEY);
+Parse.serverURL = process.env.PARSE_SERVER_URL;
+
+const cultRoutes = require(path.join(__dirname, 'routes', 'cultRoutes'));
 
 const app = express();
+
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));  // Diretório público para arquivos estáticos (CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.set('view engine', 'ejs');  // Configuração do motor de templates (EJS)
+// View engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.use('/', cultRoutes);  // Definindo rotas
+// Rotas
+app.use('/', cultRoutes);
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
+    console.log('Parse inicializado com sucesso');
 });
