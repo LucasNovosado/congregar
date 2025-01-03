@@ -5,38 +5,47 @@ module.exports = {
   entry: {
     main: './public/js/main.js',
     styles: [
-      './public/css/addForm.css',
-      './public/css/editForm.css',
+      './public/css/styles.css',
       './public/css/filter.css',
-      './public/css/styles.css'
+      './public/css/addForm.css',
+      './public/css/editForm.css'
     ]
   },
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist/'
+    path: path.resolve(__dirname, 'public/dist'),
+    publicPath: '/dist/',
+    clean: true
   },
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader'
-        ]
-      },
-      {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader'
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
         }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../'
+            }
+          },
+          'css-loader'
+        ]
       }
     ]
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'styles.bundle.css'
+      filename: '[name].bundle.css'
     })
   ],
   mode: 'production',
