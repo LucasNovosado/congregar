@@ -5,20 +5,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const endDate = document.getElementById('endDate');
 
     // Função para atualizar card de estatística
-    function updateStatCard(selector, text, count = 0) {
-        const card = document.querySelector(selector);
-        if (!card) return;
+    function updateStatCard(cardIndex, icon, title, text, count = 0) {
+        const statisticsCards = document.querySelector('.statistics-cards');
+        if (!statisticsCards) {
+            console.log('Container de estatísticas não encontrado');
+            return;
+        }
 
-        // Se não houver contagem, mostrar '--'
-        const displayText = count > 0 ? `${text}: ${count}x` : '--';
+        const card = statisticsCards.children[cardIndex - 1];
+        if (!card) {
+            console.log('Card não encontrado:', cardIndex);
+            return;
+        }
+
+        // Atualizar o conteúdo do card
+        const h3 = card.querySelector('h3');
+        const p = card.querySelector('p');
+        
+        if (!h3 || !p) {
+            console.log('Elementos não encontrados no card:', cardIndex);
+            return;
+        }
+
+        h3.innerHTML = `<i class="fas fa-${icon}"></i> ${title}`;
+        
+        // Se não houver contagem ou text for '--', mostrar apenas '--'
+        if (count === 0 || text === '--') {
+            p.textContent = '--';
+        } else {
+            p.textContent = `${text}: ${count}x`;
+        }
         
         // Adicionar classe para animação
-        card.classList.add('updating');
-        card.textContent = displayText;
-        
-        // Remover classe após animação
+        card.classList.add('filtered');
         setTimeout(() => {
-            card.classList.remove('updating');
+            card.classList.remove('filtered');
         }, 500);
     }
 
@@ -78,12 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Atualizar cards de estatísticas
-        const cultStats = document.querySelector('.stat-card:nth-child(1) p');
-        const serviceStats = document.querySelector('.stat-card:nth-child(2) p');
-        const preachingStats = document.querySelector('.stat-card:nth-child(3) p');
-        const locationStats = document.querySelector('.stat-card:nth-child(4) p');
-
         if (hasVisibleCards) {
             // Encontrar mais frequentes
             const topService = Object.entries(stats.services)
@@ -93,24 +108,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const topLocation = Object.entries(stats.locations)
                 .reduce((a, b) => b[1] > a[1] ? b : a, ['--', 0]);
 
-            // Atualizar estatísticas
-            cultStats.textContent = `Congregou: ${stats.cultCount}x`;
-            serviceStats.textContent = `${topService[0]}: ${topService[1]}x`;
-            preachingStats.textContent = `${topPreaching[0]}: ${topPreaching[1]}x`;
-            locationStats.textContent = `${topLocation[0]}: ${topLocation[1]}x`;
+            // Atualizar cards com ícones e títulos corretos
+            updateStatCard(1, 'fire', 'Cultos', 'Congregou', stats.cultCount);
+            updateStatCard(2, 'handshake', 'Atendimentos', topService[0], topService[1]);
+            updateStatCard(3, 'book-open', 'Exortação', topPreaching[0], topPreaching[1]);
+            updateStatCard(4, 'home', 'Casa de Oração', topLocation[0], topLocation[1]);
         } else {
-            // Caso não encontre resultados
-            cultStats.textContent = '--';
-            serviceStats.textContent = '--';
-            preachingStats.textContent = '--';
-            locationStats.textContent = '--';
+            // Caso não encontre resultados, mostrar '--' em todos os cards com seus respectivos títulos e ícones
+            updateStatCard(1, 'fire', 'Cultos', '--', 0);
+            updateStatCard(2, 'handshake', 'Atendimentos', '--', 0);
+            updateStatCard(3, 'book-open', 'Exortação', '--', 0);
+            updateStatCard(4, 'home', 'Casa de Oração', '--', 0);
         }
-
-        // Adicionar efeito visual aos cards de estatísticas
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.classList.add('filtered');
-            setTimeout(() => card.classList.remove('filtered'), 500);
-        });
 
         if (!hasVisibleCards) {
             alert('Nenhum culto encontrado no período selecionado.');
@@ -132,15 +141,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Event Listeners
-    filterButton.addEventListener('click', filterCults);
-    resetButton.addEventListener('click', resetFilters);
+    if (filterButton) {
+        filterButton.addEventListener('click', filterCults);
+    }
+
+    if (resetButton) {
+        resetButton.addEventListener('click', resetFilters);
+    }
 
     // Filtrar ao pressionar Enter
     [startDate, endDate].forEach(input => {
-        input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                filterCults();
-            }
-        });
+        if (input) {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterCults();
+                }
+            });
+        }
     });
 });

@@ -1,4 +1,9 @@
 // main.js
+import '../css/styles.css';
+import '../css/filter.css';
+import '../css/addForm.css';
+import '../css/editForm.css';
+import './filter.js';  // Adicione esta linha
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handle form submission for adding a new cult
