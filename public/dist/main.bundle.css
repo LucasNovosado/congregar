@@ -43,7 +43,7 @@ body {
     padding: 20px 40px;
     flex-wrap: wrap;
     max-width: 1400px;
-    margin: 0 20px; /* Adiciona margem de 20px nas laterais */
+    margin: auto; /* Adiciona margem de 20px nas laterais */
 }
 
 
@@ -393,7 +393,7 @@ body {
     border-radius: 8px;  /* Bordas arredondadas */
     border: 1px solid #f0e6d2;  /* Cor clara para o contorno */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);  /* Sombras suaves */
-    max-width: 88%;  /* Limita a largura para não ficar muito grande */
+    max-width: 90%;  /* Limita a largura para não ficar muito grande */
     margin-left: auto;
     margin-right: auto;
 }
@@ -407,7 +407,7 @@ body {
 
 /* Estilo da citação (quote) */
 .verse i {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-style: italic;
     color: #5f4b3b; /* Tom de marrom mais escuro para o destaque */
     display: inline-block;
