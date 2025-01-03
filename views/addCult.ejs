@@ -21,6 +21,12 @@
         <form class="add-form" method="POST" action="/add" id="addForm">
             <div class="form-content">
                 <div class="form-group">
+                    <label for="amount">
+                        <i class="fas fa-hashtag"></i> Culto N°:
+                    </label>
+                    <input type="number" id="amount" name="amount" required placeholder="Digite o número do culto" />
+                </div>
+                <div class="form-group">
                     <label for="date">
                         <i class="fas fa-calendar"></i> Data:
                     </label>
@@ -36,7 +42,7 @@
 
                 <div class="form-group">
                     <label for="service">
-                        <i class="fas fa-hands-helping"></i> Serviço:
+                        <i class="fas fa-hands-helping"></i> Atendimento:
                     </label>
                     <input type="text" id="service" name="service" required placeholder="Digite o serviço" />
                 </div>
@@ -50,16 +56,9 @@
 
                 <div class="form-group">
                     <label for="preaching">
-                        <i class="fas fa-pray"></i> Pregação:
+                        <i class="fas fa-pray"></i> Exortação:
                     </label>
                     <input type="text" id="preaching" name="preaching" required placeholder="Digite a pregação" />
-                </div>
-
-                <div class="form-group">
-                    <label for="amount">
-                        <i class="fas fa-hashtag"></i> Culto N°:
-                    </label>
-                    <input type="number" id="amount" name="amount" required placeholder="Digite o número do culto" />
                 </div>
             </div>
 
