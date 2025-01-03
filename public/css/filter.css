@@ -1,0 +1,208 @@
+/* Estilos modernos para o filtro de data */
+.date-filter {
+    width: 100%;
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 40px;
+}
+
+.filter-container {
+    background: linear-gradient(145deg, #ffffff, #f3f4f6);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    transition: all 0.3s ease;
+}
+
+.filter-container:hover {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+}
+
+.filter-group label {
+    color: #2d3748;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.filter-group label i {
+    color: #2d3748;
+    font-size: 1.2rem;
+}
+
+.filter-group input[type="date"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #2d3748;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.filter-group input[type="date"]:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.filter-group input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+.filter-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.filter-button {
+    background: linear-gradient(135deg, #2d3748 0%, #4d5a70 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.filter-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.25);
+}
+
+.filter-button i {
+    font-size: 1.1rem;
+}
+
+.reset-button {
+    background: white;
+    color: #2d3748;
+    padding: 12px 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.reset-button:hover {
+    background: #f7fafc;
+    transform: translateY(-2px);
+    border-color: #cbd5e0;
+}
+
+.reset-button i {
+    font-size: 1.1rem;
+}
+
+@media (max-width: 1024px) {
+    .filter-container {
+        flex-wrap: wrap;
+    }
+
+    .filter-group {
+        min-width: calc(50% - 10px);
+    }
+}
+
+@media (max-width: 768px) {
+    .date-filter {
+        padding: 0 15px; /* Reduzido de 20px para 15px */
+        margin: 10 10px; /* Reduzido de 20px para 10px */
+    }
+
+    .filter-container {
+        padding: 10px;
+        flex-direction: column;
+        margin-right: 30px; /* Adicionado margem para evitar ultrapassar */
+        margin-left: 0px; /* Adicionando margem para o lado esquerdo */
+    }
+
+    .filter-group {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .filter-button, .reset-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Animações para os cards de estatísticas */
+.stat-card {
+    transition: all 0.3s ease;
+}
+
+.stat-card.filtered {
+    animation: pulse 0.5s ease-in-out;
+}
+
+.stat-card p {
+    transition: all 0.3s ease;
+}
+
+.stat-card.filtered p {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para quando não há resultados */
+.stat-card p:empty::before,
+.stat-card p:contains("--") {
+    content: '--';
+    color: #a0aec0;
+    font-style: italic;
+}
