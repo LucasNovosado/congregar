@@ -14,7 +14,10 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Configuração dos arquivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/dist', express.static(path.join(__dirname, 'dist')));
 
 // View engine
 app.set('view engine', 'ejs');
@@ -22,7 +25,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Rotas
 app.use('/', cultRoutes);
-app.use('/dist', express.static('dist'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
