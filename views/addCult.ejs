@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Culto</title>
+    <link rel="stylesheet" href="/css/addForm.css">
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="title">
+            <i class="fas fa-plus-circle"></i>
+            Adicionar Culto
+        </h1>
+        <p class="subtitle">Registre um novo culto</p>
+    </div>
+
+    <div class="add-form-container">
+        <form class="add-form" method="POST" action="/add" id="addForm">
+            <div class="form-content">
+                <div class="form-group">
+                    <label for="date">
+                        <i class="fas fa-calendar"></i> Data:
+                    </label>
+                    <input type="date" id="date" name="date" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="location">
+                        <i class="fas fa-map-marker-alt"></i> Localização:
+                    </label>
+                    <input type="text" id="location" name="location" required placeholder="Digite a localização" />
+                </div>
+
+                <div class="form-group">
+                    <label for="service">
+                        <i class="fas fa-hands-helping"></i> Serviço:
+                    </label>
+                    <input type="text" id="service" name="service" required placeholder="Digite o serviço" />
+                </div>
+
+                <div class="form-group">
+                    <label for="hollyWord">
+                        <i class="fas fa-book-open"></i> Palavra Sagrada:
+                    </label>
+                    <input type="text" id="hollyWord" name="hollyWord" required placeholder="Digite a palavra sagrada" />
+                </div>
+
+                <div class="form-group">
+                    <label for="preaching">
+                        <i class="fas fa-pray"></i> Pregação:
+                    </label>
+                    <input type="text" id="preaching" name="preaching" required placeholder="Digite a pregação" />
+                </div>
+
+                <div class="form-group">
+                    <label for="amount">
+                        <i class="fas fa-hashtag"></i> Culto N°:
+                    </label>
+                    <input type="number" id="amount" name="amount" required placeholder="Digite o número do culto" />
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="save-button">
+                    <i class="fas fa-save"></i> Salvar Culto
+                </button>
+                <a href="/" class="cancel-button">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('addForm').addEventListener('submit', function(e) {
+            const inputs = this.querySelectorAll('input[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('invalid');
+                    const label = input.previousElementSibling;
+                    label.classList.add('invalid-label');
+                } else {
+                    input.classList.remove('invalid');
+                    const label = input.previousElementSibling;
+                    label.classList.remove('invalid-label');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Por favor, preencha todos os campos obrigatórios.');
+            } else {
+                const submitBtn = this.querySelector('.save-button');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
+                submitBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
