@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Culto</title>
-    <link rel="stylesheet" href="/css/addForm.css">
-</head>
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Adicionar Culto</title>
+        <link rel="stylesheet" href="/dist/styles.bundle.css">
+    </head>
 <body>
     <div class="page-header">
         <h1 class="title">
@@ -73,8 +73,9 @@
             </div>
         </form>
     </div>
-
+    <script src="/dist/main.bundle.js"></script>
     <script>
+
         document.getElementById('addForm').addEventListener('submit', function(e) {
             const inputs = this.querySelectorAll('input[required]');
             let isValid = true;
