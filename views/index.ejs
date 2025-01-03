@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cult Manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/filter.css">
+    <script src="/js/filter.js" defer></script>
+</head>
+<body>
+    <h1 class="title">Memórias de Fé</h1>
+    <div class="separator"></div>
+    <h2 class="subTitle">Resumo</h2>
+    <div class="verse">
+        <p><i>"Buscai, pois, em primeiro lugar, o Reino de Deus e a sua justiça, e todas essas coisas vos serão acrescentadas." – Mateus 6:33</i></p>
+    </div>
+    
+    <div class="statistics-cards">
+        <div class="stat-card">
+            <h3><i class="fas fa-fire"></i> Cultos</h3>
+            <p>Congregou: <%= cultCount %>x</p>
+        </div>        
+        <div class="stat-card">
+            <h3><i class="fas fa-handshake"></i> Atendimentos</h3>
+            <p><%= topAttendee.name %>: <%= topAttendee.count %>x</p>
+        </div>
+        <div class="stat-card">
+            <h3><i class="fas fa-book-open"></i> Exortação</h3>
+            <p><%= topExhorter.name %>: <%= topExhorter.count %>x</p>
+        </div>        
+        <div class="stat-card">
+            <h3><i class="fas fa-home"></i> Casa de Oração</h3>
+            <p><%= topLocation.location %>: <%= topLocation.count %>x</p>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+    <h2 class="subTitle">Lista de Cultos</h2>
+    <!-- Filtro de Data -->
+    <div class="date-filter">
+        <div class="filter-container">
+            <div class="filter-group">
+                <label for="startDate">
+                    <i class="fas fa-calendar-alt"></i>
+                    De:
+                </label>
+                <input type="date" id="startDate" name="startDate">
+            </div>
+            <div class="filter-group">
+                <label for="endDate">
+                    <i class="fas fa-calendar-alt"></i>
+                    Até:
+                </label>
+                <input type="date" id="endDate" name="endDate">
+            </div>
+            <button id="filterButton" class="filter-button">
+                <i class="fas fa-search"></i>
+                Filtrar
+            </button>
+            <button id="resetFilter" class="reset-button">
+                <i class="fas fa-undo"></i>
+                Limpar
+            </button>
+        </div>
+    </div>
+    <div class="cult-container">
+        <% cults.forEach(cult => { %>
+        <div class="cult-card">
+            <h2 class="cult-title">Culto n°: <%= cult.get('amount') %></h2>
+            
+            <% 
+                const date = new Date(cult.get('date')); 
+                const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+            %>
+            
+            <p><strong>Data:</strong> <%= formattedDate %></p>
+            <p><strong>Local:</strong> <%= cult.get('location') %></p>
+            <p><strong>Atendimento:</strong> <%= cult.get('service') %></p>
+            <p><strong>Palavra:</strong> <%= cult.get('hollyWord') %></p>
+            <p><strong>Pregação:</strong> <%= cult.get('preaching') %></p>
+            
+            <div class="actions">
+                <a href="/edit/<%= cult.id %>" class="edit-button">
+                    Editar
+                </a>
+                <form action="/delete/<%= cult.id %>" method="POST" 
+                      onsubmit="return confirm('Tem certeza que deseja remover este culto?')" 
+                      style="display: inline;">
+                    <button type="submit" class="delete-button">
+                        <i class="fas fa-trash-alt"></i> Remover
+                    </button>
+                </form>
+            </div>                                  
+        </div>
+        <% }) %>
+    </div>
+
+    <div class="add-cult-button">
+        <a href="/add" class="btn" title="Adicionar novo culto">
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
+</body>
+</html>
