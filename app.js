@@ -22,6 +22,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Rotas
 app.use('/', cultRoutes);
+app.use('/dist', express.static('dist'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

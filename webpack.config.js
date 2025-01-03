@@ -1,19 +1,52 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/js/index.js',  // Alvo para o código JS do front-end (ex: 'filter.js' ou 'index.js')
-  output: {
-    filename: 'bundle.js',  // Nome do arquivo JavaScript empacotado
-    path: path.resolve(__dirname, 'public/js'),  // Pasta para onde o bundle será enviado
+  entry: {
+    main: './public/js/main.js',
+    styles: [
+      './public/css/addForm.css',
+      './public/css/editForm.css',
+      './public/css/filter.css',
+      './public/css/styles.css'
+    ]
   },
-  mode: 'production',  // Modo de produção
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/dist/'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: 'styles.bundle.css'
+    })
+  ],
+  mode: 'production',
   resolve: {
     fallback: {
-      "fs": false,  // Para evitar erro de módulos do Node.js não encontrados
+      "fs": false,
       "https": require.resolve("https-browserify"),
       "http": require.resolve("stream-http"),
       "url": require.resolve("url/"),
-      "buffer": require.resolve("buffer/"),
+      "buffer": require.resolve("buffer/")
     }
   }
 };
