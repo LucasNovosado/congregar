@@ -4,16 +4,13 @@ exports.addCultData = async (req, res) => {
     try {
         const { date, location, service, hollyWord, preaching, amount } = req.body;
 
-        // Garantindo que a data seja um objeto Date válido
         const parsedDate = new Date(date);
         const parsedAmount = Number(amount);
 
-        // Verificação de campos obrigatórios
         if (!date || !location || !service || !hollyWord || !preaching || !amount) {
             throw new Error('Faltando campos obrigatórios');
         }
 
-        // Adicionando o culto ao banco de dados (modelo)
         await CultModel.add({
             date: parsedDate,
             location,
@@ -21,9 +18,8 @@ exports.addCultData = async (req, res) => {
             hollyWord,
             preaching,
             amount: parsedAmount,
-        });
+        }, req.session.user.id);
 
-        // Redirecionando após adicionar
         res.redirect('/');
     } catch (error) {
         console.error("Error adding data:", error);
@@ -33,10 +29,8 @@ exports.addCultData = async (req, res) => {
 
 exports.getAllCultData = async (req, res) => {
     try {
-        // Obtendo todos os cultos
-        const data = await CultModel.getAll();
-
-        // Formatando as datas para exibição
+        const data = await CultModel.getAll(req.session.user.id);
+        
         const formattedCults = data.map(cult => {
             const date = new Date(cult.get('date'));
             const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
@@ -44,61 +38,55 @@ exports.getAllCultData = async (req, res) => {
             return cult;
         });
 
-        // Calculando as estatísticas
         const cultCount = formattedCults.length;
 
-        let topAttendee = { name: '', count: 0 };
-        let topExhorter = { name: '', count: 0 };
-        let topLocation = { location: '', count: 0 };
-
+        // Contadores para estatísticas
         const serviceCount = {};
         const preachingCount = {};
         const locationCount = {};
 
-        // Contando as ocorrências de cada atendimento, exortação e local
+        // Contando ocorrências
         formattedCults.forEach(cult => {
             const service = cult.get('service');
             const preaching = cult.get('preaching');
             const location = cult.get('location');
 
-            // Contando atendimentos
             serviceCount[service] = (serviceCount[service] || 0) + 1;
-
-            // Contando exortações
             preachingCount[preaching] = (preachingCount[preaching] || 0) + 1;
-
-            // Contando locais
             locationCount[location] = (locationCount[location] || 0) + 1;
         });
 
-        // Encontrando o atendimento mais frequente
-        for (const service in serviceCount) {
-            if (serviceCount[service] > topAttendee.count) {
-                topAttendee = { name: service, count: serviceCount[service] };
-            }
-        }
+        // Convertendo para arrays e ordenando
+        const sortedServices = Object.entries(serviceCount)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => b.count - a.count);
 
-        // Encontrando a exortação mais frequente
-        for (const preaching in preachingCount) {
-            if (preachingCount[preaching] > topExhorter.count) {
-                topExhorter = { name: preaching, count: preachingCount[preaching] };
-            }
-        }
+        const sortedPreaching = Object.entries(preachingCount)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => b.count - a.count);
 
-        // Encontrando o local mais frequente
-        for (const location in locationCount) {
-            if (locationCount[location] > topLocation.count) {
-                topLocation = { location, count: locationCount[location] };
-            }
-        }
+        const sortedLocations = Object.entries(locationCount)
+            .map(([name, count]) => ({ name, count }))
+            .sort((a, b) => b.count - a.count);
 
-        // Enviando os dados para a view (index.ejs)
+        // Pegando os top 3 de cada categoria
+        const topAttendee = sortedServices[0] || { name: '', count: 0 };
+        const topExhorter = sortedPreaching[0] || { name: '', count: 0 };
+        const topLocation = { 
+            location: sortedLocations[0]?.name || '', 
+            count: sortedLocations[0]?.count || 0 
+        };
+
         res.render('index', { 
             cults: formattedCults, 
-            cultCount, 
-            topAttendee, 
-            topExhorter, 
-            topLocation 
+            cultCount,
+            topAttendee,
+            topExhorter,
+            topLocation,
+            // Enviando listas completas ordenadas
+            allServices: sortedServices,
+            allPreaching: sortedPreaching,
+            allLocations: sortedLocations
         });
     } catch (error) {
         console.error("Error fetching data:", error);
