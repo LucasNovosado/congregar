@@ -12,7 +12,7 @@ router.get('/add', (req, res) => {
 
 router.post('/add', cultController.addCultData);
 router.get('/edit/:id', cultController.getEditForm);
-router.post('/update/:id', cultController.updateCultData);
+router.post('/edit/:id', cultController.updateCultData); // Mudou de /update para /edit
 router.post('/delete/:id', cultController.deleteCultData);
 
 module.exports = router;
