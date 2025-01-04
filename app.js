@@ -2,14 +2,28 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const Parse = require('parse/node');
+const session = require('express-session');
 
 // Configuração do Parse
 Parse.initialize(process.env.PARSE_APP_ID, process.env.PARSE_JS_KEY);
 Parse.serverURL = process.env.PARSE_SERVER_URL;
 
 const cultRoutes = require(path.join(__dirname, 'routes', 'cultRoutes'));
+const authRoutes = require(path.join(__dirname, 'routes', 'authRoutes'));
+const { requireAuth } = require('./controllers/authController');
 
 const app = express();
+
+// Configuração da sessão
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'sua_chave_secreta_aqui',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 24 * 60 * 60 * 1000 // 24 horas
+    }
+}));
 
 // Middleware
 app.use(bodyParser.json());
@@ -23,8 +37,15 @@ app.use('/dist', express.static(path.join(__dirname, 'public', 'dist')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware para disponibilizar o usuário para todas as views
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
+
 // Rotas
-app.use('/', cultRoutes);
+app.use('/', authRoutes);
+app.use('/', requireAuth, cultRoutes); // Protege todas as rotas de cultos
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
