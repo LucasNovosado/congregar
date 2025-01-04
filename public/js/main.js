@@ -3,7 +3,7 @@ import '../css/styles.css';
 import '../css/filter.css';
 import '../css/addForm.css';
 import '../css/editForm.css';
-import './filter.js';  // Adicione esta linha
+import './filter.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handle form submission for adding a new cult
@@ -57,5 +57,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('An error occurred. Please try again.');
             }
         });
+    });
+
+    // Função para controlar a exibição dos modais
+    window.toggleStatsModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal.style.display === "block") {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        } else {
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+    }
+
+    // Fechar modal ao clicar fora dele
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('stats-modal')) {
+            event.target.style.display = 'none';
+            document.body.style.overflow = "auto";
+        }
+    });
+
+    // Prevenir que cliques dentro do modal fechem ele
+    const modals = document.querySelectorAll('.modal-content');
+    modals.forEach(modal => {
+        modal.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    });
+
+    // Adicionar eventos de teclado para fechar modal com ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modals = document.querySelectorAll('.stats-modal');
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+            document.body.style.overflow = "auto";
+        }
     });
 });
