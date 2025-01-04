@@ -15,18 +15,25 @@ const { requireAuth } = require('./controllers/authController');
 const app = express();
 
 // Configuração otimizada da sessão
-app.use(session({
-    name: 'congregar.session',
+const sessionConfig = {
+    name: 'congregar.sid',
     secret: process.env.SESSION_SECRET || 'sua_chave_secreta_aqui',
-    resave: true,
-    rolling: true,
+    resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 24 horas
-    }
-}));
+        maxAge: 24 * 60 * 60 * 1000, // 24 horas
+        sameSite: 'lax'
+    },
+    proxy: process.env.NODE_ENV === 'production' // Importante para o Render
+};
+
+// Ajusta configuração de cookie seguro baseado no proxy
+app.set('trust proxy', 1);
+
+app.use(session(sessionConfig));
 
 // Middleware
 app.use(bodyParser.json());
