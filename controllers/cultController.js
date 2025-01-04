@@ -162,6 +162,7 @@ exports.getEditForm = async (req, res) => {
         const date = new Date(cult.get('date'));
         const formattedDate = date.toISOString().split('T')[0];
 
+        // Renderizando o formulário com os dados
         res.render('editCult', {
             cult: {
                 id: cult.id,
