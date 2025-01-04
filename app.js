@@ -14,18 +14,19 @@ const { requireAuth } = require('./controllers/authController');
 
 const app = express();
 
-// Configuração da sessão
+// Configuração otimizada da sessão
 app.use(session({
+    name: 'congregar.session',
     secret: process.env.SESSION_SECRET || 'sua_chave_secreta_aqui',
-    resave: false,
+    resave: true,
+    rolling: true,
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 // 24 horas
     }
 }));
-
-app.use(express.static('public'));
 
 // Middleware
 app.use(bodyParser.json());
@@ -47,7 +48,7 @@ app.use((req, res, next) => {
 
 // Rotas
 app.use('/', authRoutes);
-app.use('/', requireAuth, cultRoutes); // Protege todas as rotas de cultos
+app.use('/', requireAuth, cultRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
