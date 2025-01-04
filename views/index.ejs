@@ -11,7 +11,20 @@
         <link rel="stylesheet" href="/dist/styles.bundle.css">
     </head>
 <body>
+    <!-- User Header -->
+    <div class="user-header">
+        <div class="user-info">
+            <i class="fas fa-user-circle"></i>
+            <span>Bem-vindo, <%= user.username %></span>
+        </div>
+        <a href="/logout" class="logout-button">
+            <i class="fas fa-sign-out-alt"></i>
+            Sair
+        </a>
+    </div>
+
     <script src="/dist/main.bundle.js"></script>
+    <br>
     <h1 class="title">Memórias do Caminho</h1>
     <div class="separator"></div>
     <h2 class="subTitle">Resumo</h2>
@@ -19,27 +32,107 @@
         <p><i>"Buscai, pois, em primeiro lugar, o Reino de Deus e a sua justiça, e todas essas coisas vos serão acrescentadas." – Mateus 6:33</i></p>
     </div>
     
-    <div class="statistics-cards">
-        <div class="stat-card">
+<!-- Dentro do div statistics-cards -->
+<div class="statistics-cards">
+    <div class="stat-card">
+        <div class="stat-header">
             <h3><i class="fas fa-fire"></i> Cultos</h3>
-            <p>Congregou: <%= cultCount %>x</p>
-        </div>        
-        <div class="stat-card">
-            <h3><i class="fas fa-handshake"></i> Atendimentos</h3>
-            <p><%= topAttendee.name %>: <%= topAttendee.count %>x</p>
         </div>
-        <div class="stat-card">
+        <p>Congregou: <%= cultCount %>x</p>
+    </div>        
+    <div class="stat-card">
+        <div class="stat-header">
+            <h3><i class="fas fa-handshake"></i> Atendimentos</h3>
+            <button class="expand-stats" onclick="toggleStatsModal('servicesModal')">
+                <i class="fas fa-expand-alt"></i>
+            </button>
+        </div>
+        <p><%= topAttendee.name %>: <%= topAttendee.count %>x</p>
+    </div>
+    <div class="stat-card">
+        <div class="stat-header">
             <h3><i class="fas fa-book-open"></i> Exortação</h3>
-            <p><%= topExhorter.name %>: <%= topExhorter.count %>x</p>
-        </div>        
-        <div class="stat-card">
+            <button class="expand-stats" onclick="toggleStatsModal('preachingModal')">
+                <i class="fas fa-expand-alt"></i>
+            </button>
+        </div>
+        <p><%= topExhorter.name %>: <%= topExhorter.count %>x</p>
+    </div>        
+    <div class="stat-card">
+        <div class="stat-header">
             <h3><i class="fas fa-home"></i> Casa de Oração</h3>
-            <p><%= topLocation.location %>: <%= topLocation.count %>x</p>
+            <button class="expand-stats" onclick="toggleStatsModal('locationsModal')">
+                <i class="fas fa-expand-alt"></i>
+            </button>
+        </div>
+        <p><%= topLocation.location %>: <%= topLocation.count %>x</p>
+    </div>
+</div>
+
+<!-- Modais de Estatísticas -->
+<div id="servicesModal" class="stats-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-handshake"></i> Todos os Atendimentos</h2>
+            <button class="close-modal" onclick="toggleStatsModal('servicesModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="stats-list">
+            <% allServices.forEach((service, index) => { %>
+                <div class="stat-item">
+                    <span class="stat-position"><%= index + 1 %>°</span>
+                    <span class="stat-name"><%= service.name %></span>
+                    <span class="stat-count"><%= service.count %>x</span>
+                </div>
+            <% }) %>
         </div>
     </div>
+</div>
+
+<div id="preachingModal" class="stats-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-book-open"></i> Todas as Exortações</h2>
+            <button class="close-modal" onclick="toggleStatsModal('preachingModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="stats-list">
+            <% allPreaching.forEach((preaching, index) => { %>
+                <div class="stat-item">
+                    <span class="stat-position"><%= index + 1 %>°</span>
+                    <span class="stat-name"><%= preaching.name %></span>
+                    <span class="stat-count"><%= preaching.count %>x</span>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<div id="locationsModal" class="stats-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-home"></i> Todas as Casas de Oração</h2>
+            <button class="close-modal" onclick="toggleStatsModal('locationsModal')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="stats-list">
+            <% allLocations.forEach((location, index) => { %>
+                <div class="stat-item">
+                    <span class="stat-position"><%= index + 1 %>°</span>
+                    <span class="stat-name"><%= location.name %></span>
+                    <span class="stat-count"><%= location.count %>x</span>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
 
     <div class="separator"></div>
     <h2 class="subTitle">Lista de Cultos</h2>
+    
     <!-- Filtro de Data -->
     <div class="date-filter">
         <div class="filter-container">
@@ -67,6 +160,7 @@
             </button>
         </div>
     </div>
+    
     <div class="cult-container">
         <% cults.forEach(cult => { %>
         <div class="cult-card">
