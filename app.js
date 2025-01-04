@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const Parse = require('parse/node');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 
 // Configuração do Parse
 Parse.initialize(process.env.PARSE_APP_ID, process.env.PARSE_JS_KEY);
@@ -14,26 +14,14 @@ const { requireAuth } = require('./controllers/authController');
 
 const app = express();
 
-// Configuração otimizada da sessão
-const sessionConfig = {
-    name: 'congregar.sid',
-    secret: process.env.SESSION_SECRET || 'sua_chave_secreta_aqui',
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, // 24 horas
-        sameSite: 'lax'
-    },
-    proxy: process.env.NODE_ENV === 'production' // Importante para o Render
-};
-
-// Ajusta configuração de cookie seguro baseado no proxy
-app.set('trust proxy', 1);
-
-app.use(session(sessionConfig));
+// Configuração da sessão com cookie-session
+app.use(cookieSession({
+    name: 'session',
+    keys: [process.env.SESSION_SECRET || 'sua_chave_secreta_aqui'],
+    maxAge: 24 * 60 * 60 * 1000, // 24 horas
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+}));
 
 // Middleware
 app.use(bodyParser.json());
@@ -52,6 +40,11 @@ app.use((req, res, next) => {
     res.locals.user = req.session.user;
     next();
 });
+
+// Se estiver em produção, confie no proxy
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+}
 
 // Rotas
 app.use('/', authRoutes);
