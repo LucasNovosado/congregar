@@ -5,9 +5,20 @@ Parse.serverURL = "https://parseapi.back4app.com";
 
 const Cult = Parse.Object.extend('Cult');
 
-exports.getAll = async () => {
+exports.getAll = async (userId) => {
     try {
         const query = new Parse.Query(Cult);
+        
+        // Adiciona filtro pelo usuário atual
+        if (userId) {
+            const userPointer = new Parse.User();
+            userPointer.id = userId;
+            query.equalTo('user', userPointer);
+        }
+
+        // Ordena por amount em ordem crescente
+        query.ascending('amount');
+        
         return await query.find();
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -15,20 +26,27 @@ exports.getAll = async () => {
     }
 };
 
-exports.add = async (data) => {
+// ... resto do código permanece igual
+
+exports.add = async (data, userId) => {
     try {
-        // Log para verificação dos dados que estão sendo recebidos
         console.log("Dados recebidos para adicionar culto:", data);
 
-        // Verificação se todos os campos obrigatórios estão presentes
         if (!data.date || !data.location || !data.service || !data.hollyWord || !data.preaching || !data.amount) {
             throw new Error("Missing required fields");
         }
 
         const cult = new Cult();
+        
+        // Adiciona o pointer para o usuário
+        if (userId) {
+            const userPointer = new Parse.User();
+            userPointer.id = userId;
+            data.user = userPointer;
+        }
+
         return await cult.save(data);
     } catch (error) {
-        // Log do erro
         console.error("Error adding data:", error);
         throw new Error('Error adding data');
     }
