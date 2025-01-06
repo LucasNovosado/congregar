@@ -59,6 +59,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+// Função para rolar até o culto específico
+window.scrollToCult = function(cultId) {
+    const cultElement = document.querySelector(`.cult-card[data-cult-id="${cultId}"]`);
+    if (cultElement) {
+        // Remove highlight de qualquer card anteriormente destacado
+        document.querySelectorAll('.cult-card.highlighted').forEach(card => {
+            card.classList.remove('highlighted');
+        });
+
+        // Adiciona a classe para destacar o card
+        cultElement.classList.add('highlighted');
+
+        // Fecha o modal
+        document.getElementById('exhortationModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+
+        // Rola até o elemento
+        cultElement.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
     // Função para controlar a exibição dos modais
     window.toggleStatsModal = function(modalId) {
         const modal = document.getElementById(modalId);
