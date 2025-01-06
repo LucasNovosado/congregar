@@ -27,6 +27,20 @@
                     <input type="number" id="amount" name="amount" required placeholder="Digite o número do culto" />
                 </div>
                 <div class="form-group">
+                    <label for="typeCult">
+                        <i class="fas fa-church"></i> Tipo de Serviço:
+                    </label>
+                    <select id="typeCult" name="typeCult" required>
+                        <option value="">Selecione o tipo de serviço</option>
+                        <option value="Culto Oficial">Culto Oficial</option>
+                        <option value="Culto Oficial (Online)">Culto Oficial (Online)</option>
+                        <option value="Reunião de Jovens e Menores">Reunião de Jovens e Menores</option>
+                        <option value="Batismo">Batismo</option>
+                        <option value="Reunião Ministerial">Reunião Ministerial</option>
+                        <option value="Ensaio Regional">Ensaio Regional</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="date">
                         <i class="fas fa-calendar"></i> Data:
                     </label>
@@ -56,12 +70,17 @@
 
                 <div class="form-group">
                     <label for="preaching">
-                        <i class="fas fa-pray"></i> Exortação:
+                        <i class="fas fa-pray"></i> Palavra relevada ao:
                     </label>
                     <input type="text" id="preaching" name="preaching" required placeholder="Digite a pregação" />
                 </div>
             </div>
-
+<div class="form-group">
+    <label for="exhortation">
+        <i class="fas fa-comment"></i> Exortação:
+    </label>
+    <input type="text" id="exhortation" name="exhortation" required placeholder="Digite a exortação" />
+</div>
             <div class="button-group">
                 <button type="submit" class="save-button">
                     <i class="fas fa-save"></i> Salvar Culto

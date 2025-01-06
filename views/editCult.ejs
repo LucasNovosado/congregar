@@ -21,6 +21,22 @@
         <form class="edit-form" method="POST" action="/edit/<%= cult.id %>" id="editForm">
             <div class="form-content">
                 <div class="form-group">
+                    <label for="amount">Culto N°:</label>
+                    <input type="number" id="amount" name="amount" value="<%= cult.amount %>" required placeholder="Digite o número do culto" />
+                </div>
+                <div class="form-group">
+                    <label for="typeCult">Tipo de Serviço:</label>
+                    <select id="typeCult" name="typeCult" required>
+                        <option value="">Selecione o tipo de serviço</option>
+                        <option value="Culto Oficial" <%= cult.typeCult === 'Culto Oficial' ? 'selected' : '' %>>Culto Oficial</option>
+                        <option value="Culto Oficial (Online)" <%= cult.typeCult === 'Culto Oficial (Online)' ? 'selected' : '' %>>Culto Oficial (Online)</option>
+                        <option value="Reunião de Jovens e Menores" <%= cult.typeCult === 'Reunião de Jovens e Menores' ? 'selected' : '' %>>Reunião de Jovens e Menores</option>
+                        <option value="Batismo" <%= cult.typeCult === 'Batismo' ? 'selected' : '' %>>Batismo</option>
+                        <option value="Reunião Ministerial" <%= cult.typeCult === 'Reunião Ministerial' ? 'selected' : '' %>>Reunião Ministerial</option>
+                        <option value="Ensaio Regional" <%= cult.typeCult === 'Ensaio Regional' ? 'selected' : '' %>>Ensaio Regional</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="date">Data:</label>
                     <input type="date" id="date" name="date" value="<%= cult.date %>" required />
                 </div>
@@ -41,14 +57,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="preaching">Pregação:</label>
+                    <label for="preaching">Palavra Revelada ao:</label>
                     <input type="text" id="preaching" name="preaching" value="<%= cult.preaching %>" required placeholder="Digite a pregação" />
                 </div>
+            </div>
 
-                <div class="form-group">
-                    <label for="amount">Culto N°:</label>
-                    <input type="number" id="amount" name="amount" value="<%= cult.amount %>" required placeholder="Digite o número do culto" />
-                </div>
+            <div class="form-group">
+                <label for="exhortation">Exortação:</label>
+                <input type="text" id="exhortation" name="exhortation" value="<%= cult.exhortation %>" required placeholder="Digite a exortação" />
             </div>
 
             <div class="button-group">

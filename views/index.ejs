@@ -52,7 +52,7 @@
     </div>
     <div class="stat-card">
         <div class="stat-header">
-            <h3><i class="fas fa-book-open"></i> Exortação</h3>
+            <h3><i class="fas fa-book-open"></i> Palavra Revelada ao</h3>
             <button class="expand-stats" onclick="toggleStatsModal('preachingModal')">
                 <i class="fas fa-expand-alt"></i>
             </button>
@@ -94,7 +94,7 @@
 <div id="preachingModal" class="stats-modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2><i class="fas fa-book-open"></i> Todas as Exortações</h2>
+            <h2><i class="fas fa-book-open"></i> Todas os irmãos que foi revelado a Palavra</h2>
             <button class="close-modal" onclick="toggleStatsModal('preachingModal')">
                 <i class="fas fa-times"></i>
             </button>
@@ -171,12 +171,13 @@
                 const date = new Date(cult.get('date')); 
                 const formattedDate = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
             %>
-            
+            <p><strong>Tipo:</strong> <%= cult.get('typeCult') %></p>
             <p><strong>Data:</strong> <%= formattedDate %></p>
             <p><strong>Local:</strong> <%= cult.get('location') %></p>
             <p><strong>Atendimento:</strong> <%= cult.get('service') %></p>
             <p><strong>Palavra:</strong> <%= cult.get('hollyWord') %></p>
-            <p><strong>Pregação:</strong> <%= cult.get('preaching') %></p>
+            <p><strong>Palavra Revelada ao:</strong> <%= cult.get('preaching') %></p>
+            <p><strong>Exortação:</strong> <%= cult.get('exhortation') %></p>
             
             <div class="actions">
                 <a href="/edit/<%= cult.id %>" class="edit-button">
