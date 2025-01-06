@@ -48,46 +48,48 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Por favor, selecione ambas as datas para filtrar.');
             return;
         }
-
+    
         const start = new Date(startDate.value);
         const end = new Date(endDate.value);
         end.setHours(23, 59, 59);
-
+    
         if (start > end) {
             alert('A data inicial não pode ser maior que a data final.');
             return;
         }
-
+    
         // Estatísticas
         let stats = {
             cultCount: 0,
             services: {},
             preachings: {},
-            locations: {}
+            locations: {},
+            exhortations: {} // Adicionado para exortações
         };
-
+    
         // Filtrar cultos
         const cards = document.querySelectorAll('.cult-card');
         let hasVisibleCards = false;
-
+    
         cards.forEach(card => {
-            const dateText = card.querySelector('p:nth-child(2)').textContent.split(':')[1].trim();
+            // Atualizado para pegar a data após o campo "Tipo"
+            const dateText = card.querySelector('p:nth-child(3)').textContent.split(':')[1].trim();
             const [day, month, year] = dateText.split('/');
             const cultDate = new Date(year, month - 1, day);
-
+    
             if (cultDate >= start && cultDate <= end) {
                 card.style.display = 'block';
                 card.style.opacity = '1';
                 hasVisibleCards = true;
-
+    
                 // Atualizar estatísticas
                 stats.cultCount++;
-
-                // Coletar dados
-                const service = card.querySelector('p:nth-child(4)').textContent.split(':')[1].trim();
-                const preaching = card.querySelector('p:nth-child(6)').textContent.split(':')[1].trim();
-                const location = card.querySelector('p:nth-child(3)').textContent.split(':')[1].trim();
-
+    
+                // Coletar dados - atualizados os índices dos elementos
+                const service = card.querySelector('p:nth-child(5)').textContent.split(':')[1].trim();
+                const preaching = card.querySelector('p:nth-child(7)').textContent.split(':')[1].trim();
+                const location = card.querySelector('p:nth-child(4)').textContent.split(':')[1].trim();
+    
                 stats.services[service] = (stats.services[service] || 0) + 1;
                 stats.preachings[preaching] = (stats.preachings[preaching] || 0) + 1;
                 stats.locations[location] = (stats.locations[location] || 0) + 1;
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 300);
             }
         });
-
+    
         if (hasVisibleCards) {
             // Encontrar mais frequentes
             const topService = Object.entries(stats.services)
@@ -107,20 +109,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 .reduce((a, b) => b[1] > a[1] ? b : a, ['--', 0]);
             const topLocation = Object.entries(stats.locations)
                 .reduce((a, b) => b[1] > a[1] ? b : a, ['--', 0]);
-
+    
             // Atualizar cards com ícones e títulos corretos
             updateStatCard(1, 'fire', 'Cultos', 'Congregou', stats.cultCount);
             updateStatCard(2, 'handshake', 'Atendimentos', topService[0], topService[1]);
-            updateStatCard(3, 'book-open', 'Exortação', topPreaching[0], topPreaching[1]);
+            updateStatCard(3, 'book-open', 'Palavra Revelada ao', topPreaching[0], topPreaching[1]);
             updateStatCard(4, 'home', 'Casa de Oração', topLocation[0], topLocation[1]);
         } else {
-            // Caso não encontre resultados, mostrar '--' em todos os cards com seus respectivos títulos e ícones
+            // Caso não encontre resultados, mostrar '--' em todos os cards
             updateStatCard(1, 'fire', 'Cultos', '--', 0);
             updateStatCard(2, 'handshake', 'Atendimentos', '--', 0);
-            updateStatCard(3, 'book-open', 'Exortação', '--', 0);
+            updateStatCard(3, 'book-open', 'Palavra Revelada ao', '--', 0);
             updateStatCard(4, 'home', 'Casa de Oração', '--', 0);
         }
-
+    
         if (!hasVisibleCards) {
             alert('Nenhum culto encontrado no período selecionado.');
         }
