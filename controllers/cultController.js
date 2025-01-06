@@ -2,12 +2,12 @@ const CultModel = require('../models/cultModel');
 
 exports.addCultData = async (req, res) => {
     try {
-        const { date, location, service, hollyWord, preaching, amount } = req.body;
+        const { date, location, service, hollyWord, preaching, amount, exhortation, typeCult } = req.body;
 
         const parsedDate = new Date(date);
         const parsedAmount = Number(amount);
 
-        if (!date || !location || !service || !hollyWord || !preaching || !amount) {
+        if (!date || !location || !service || !hollyWord || !preaching || !amount || !exhortation || !typeCult) {
             throw new Error('Faltando campos obrigatórios');
         }
 
@@ -18,6 +18,8 @@ exports.addCultData = async (req, res) => {
             hollyWord,
             preaching,
             amount: parsedAmount,
+            exhortation,
+            typeCult // Agora o campo será salvo corretamente
         }, req.session.user.id);
 
         res.redirect('/');
@@ -109,21 +111,21 @@ exports.deleteCultData = async (req, res) => {
 exports.updateCultData = async (req, res) => {
     try {
         const { id } = req.params;
-        const { date, location, service, hollyWord, preaching, amount } = req.body;
+        const { date, location, service, hollyWord, preaching, amount, exhortation, typeCult } = req.body;
 
-        // Validação dos campos
-        if (!date || !location || !service || !hollyWord || !preaching || !amount) {
+        if (!date || !location || !service || !hollyWord || !preaching || !amount || !exhortation || !typeCult) {
             throw new Error('Todos os campos são obrigatórios');
         }
 
-        // Atualizando os dados do culto
         const updatedCult = {
             date: new Date(date),
             location,
             service,
             hollyWord,
             preaching,
-            amount: Number(amount)
+            amount: Number(amount),
+            exhortation,
+            typeCult
         };
 
         await CultModel.update(id, updatedCult);
@@ -146,11 +148,9 @@ exports.getEditForm = async (req, res) => {
             return res.status(404).send('Culto não encontrado');
         }
 
-        // Formatando a data para o formato esperado pelo input type="date"
         const date = new Date(cult.get('date'));
         const formattedDate = date.toISOString().split('T')[0];
 
-        // Renderizando o formulário com os dados
         res.render('editCult', {
             cult: {
                 id: cult.id,
@@ -159,7 +159,9 @@ exports.getEditForm = async (req, res) => {
                 service: cult.get('service'),
                 hollyWord: cult.get('hollyWord'),
                 preaching: cult.get('preaching'),
-                amount: cult.get('amount')
+                amount: cult.get('amount'),
+                exhortation: cult.get('exhortation'),
+                typeCult: cult.get('typeCult') // Adicionando o tipo do culto
             }
         });
     } catch (error) {
