@@ -75,12 +75,12 @@
                     <input type="text" id="preaching" name="preaching" required placeholder="Digite a pregação" />
                 </div>
             </div>
-<div class="form-group">
-    <label for="exhortation">
-        <i class="fas fa-comment"></i> Exortação:
-    </label>
-    <input type="text" id="exhortation" name="exhortation" required placeholder="Digite a exortação" />
-</div>
+            <div class="form-group textarea-group">
+                <label for="exhortation">
+                    <i class="fas fa-comment"></i> Exortação:
+                </label>
+                <textarea id="exhortation" name="exhortation" required placeholder="Digite a exortação" rows="3"></textarea>
+            </div>
             <div class="button-group">
                 <button type="submit" class="save-button">
                     <i class="fas fa-save"></i> Salvar Culto
@@ -91,6 +91,14 @@
             </div>
         </form>
     </div>
+    <script>
+        // Auto-resize do textarea
+        const textarea = document.getElementById('exhortation');
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    </script>
     <script src="/dist/main.bundle.js"></script>
     <script>
 
