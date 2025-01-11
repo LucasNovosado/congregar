@@ -148,3 +148,36 @@ body {
         flex-direction: column;
     }
 }
+
+.form-group select option[value=""] {
+    color: #a0aec0;
+}
+
+.form-group select option[value=""] {
+    color: #a0aec0;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #2d3748;
+    background: #ffffff;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    resize: vertical;
+    min-height: 100px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0e72c4;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+.form-group textarea::placeholder {
+    color: #a0aec0;
+}
